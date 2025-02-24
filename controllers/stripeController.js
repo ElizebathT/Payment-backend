@@ -41,7 +41,7 @@ const stripeController={
                     // subscriptionPlanId
                 },
             })
-            res.json({
+            res.send({
                 clientSecret:paymentIntent.client_secret,
                 // userEmail:'abc@gmail.com',
                 // subscriptionPlanId

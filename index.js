@@ -11,9 +11,9 @@ const app = express();
 
 connectDB()
 const corsOption = {
-    origin:"http://localhost:5173",
-    optionsSuccessStatus: 200
-
+    origin:"https://payment-frontend-ruby.vercel.app",
+    optionsSuccessStatus: 200,
+    credentials: true
 }
 app.use(cors(corsOption));
 app.use(express.json());
