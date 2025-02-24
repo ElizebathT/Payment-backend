@@ -86,7 +86,7 @@ const stripeController={
         try {
             event = stripe.webhooks.constructEvent(req.body, "whsec_QB5yTbSHN4DBFZkyuDY0QMnGcsB7pC90", sig);
         } catch (err) {
-            return response.status(400).send(`Webhook Error: ${err.message}`);
+            return res.status(400).send(`Webhook Error: ${err.message}`);
         }
 
         // Handle events
