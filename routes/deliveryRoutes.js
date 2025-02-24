@@ -4,6 +4,7 @@ const userAuthentication = require("../middlewares/userAuthentication");
 const twilioClient = require("../middlewares/twilio");
 
 const deliveryRouter = express.Router();
+express.json()
 
 deliveryRouter.put("/update", userAuthentication, deliveryController.updateDeliveryStatus);
 deliveryRouter.get("/get", userAuthentication, deliveryController.getDeliveryByOrder);

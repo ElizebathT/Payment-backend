@@ -4,6 +4,7 @@ const complaintController = require("../controllers/complaintController");
 const adminAuthentication = require("../middlewares/admin");
 
 const complaintRouter = express.Router();
+express.json()
 
 complaintRouter.post("/add", userAuthentication, complaintController.fileComplaint);
 complaintRouter.get("/get", userAuthentication, complaintController.getUserComplaints);

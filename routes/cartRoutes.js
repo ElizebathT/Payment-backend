@@ -3,6 +3,7 @@ const cartController = require("../controllers/cartController");
 const userAuthentication = require("../middlewares/userAuthentication");
 
 const cartRouter = express.Router();
+express.json()
 
 cartRouter.post("/add", userAuthentication, cartController.addToCart);
 cartRouter.get("/get", userAuthentication, cartController.getCart);

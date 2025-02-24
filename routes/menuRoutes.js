@@ -3,6 +3,7 @@ const menuController = require("../controllers/menuController");
 const userAuthentication = require("../middlewares/userAuthentication");
 const  upload  = require("../middlewares/cloudinary");
 const menuRouter = express.Router();
+express.json()
 
 menuRouter.post("/add", userAuthentication,upload.single("image"),menuController.createMenuItem);
 

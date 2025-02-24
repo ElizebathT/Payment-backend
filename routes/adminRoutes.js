@@ -5,6 +5,8 @@ const adminAuthentication = require("../middlewares/admin");
 
 const adminRouter = express.Router();
 
+express.json()
+
 adminRouter.get("/get", userAuthentication,adminAuthentication, adminController.getDashboardData);
 adminRouter.put("/verify", userAuthentication,adminAuthentication, adminController.verifyUser);
 
