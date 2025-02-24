@@ -10,11 +10,23 @@ const app = express();
 
 
 connectDB()
-const corsOption = {
-    origin:"https://payment-frontend-ruby.vercel.app",
+const allowedOrigins = [
+    "http://localhost:5173",                     // For local development
+    "https://payment-frontend-ruby.vercel.app"   // For production
+  ];
+  
+  const corsOption = {
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); // Allow request
+      } else {
+        callback(new Error("Not allowed by CORS")); // Block request
+      }
+    },
     optionsSuccessStatus: 200,
     credentials: true
-}
+  };
+  
 app.use(cors(corsOption));
 app.use(express.json());
 app.use(cookieParser())
