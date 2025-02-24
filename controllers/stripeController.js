@@ -52,19 +52,19 @@ const stripeController={
         }
     ),
     verify:asyncHandler(async(req,res)=>{
-        const {paymentId}=req.params
-        const paymentIntent=await stripe.paymentIntents.retrieve(paymentId)
-        console.log(paymentIntent);
-        if(paymentIntent.status!=='success'){
-            const metadata=paymentIntent?.metadata
+        // const {paymentId}=req.params
+        // const paymentIntent=await stripe.paymentIntents.retrieve(paymentId)
+        // console.log(paymentIntent);
+        // if(paymentIntent.status!=='success'){
+        //     const metadata=paymentIntent?.metadata
         //     // const subscriptionPlanId=metadata?.subscriptionPlanId
         //     // const userId=metadata.userId
         //     // const userFound=await User.findById(userId)
         //     // if(!userFound){
         //     //     throw new Error('User not found')
         //     // }
-            const amount=paymentIntent?.amount/100
-            const currency=paymentIntent?.currency
+            // const amount=paymentIntent?.amount/100
+            // const currency=paymentIntent?.currency
         //     // const newPayment=await Payment.create({
         //     //     user:userId,
         //     //     // subscriptionPlan:subscriptionPlanId,
@@ -94,14 +94,14 @@ const stripeController={
             console.log('💰 Payment succeeded!');
         }
 
-        res.json({ received: true });
-            console.log('SUCCESS');
-            res.json({
-                status:true,
-                message:'Payment verified, user updated',
-                // userFound
-            })
-        }
+        // res.json({ received: true });
+        //     console.log('SUCCESS');
+        //     res.json({
+        //         status:true,
+        //         message:'Payment verified, user updated',
+        //         // userFound
+        //     })
+        // }
         
     })
 }
