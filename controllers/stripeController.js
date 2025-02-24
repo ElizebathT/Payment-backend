@@ -52,19 +52,19 @@ const stripeController={
         }
     ),
     verify:asyncHandler(async(req,res)=>{
-        // const {paymentId}=req.params
-        // const paymentIntent=await stripe.paymentIntents.retrieve(paymentId)
-        // console.log(paymentIntent);
-        // if(paymentIntent.status!=='success'){
-        //     const metadata=paymentIntent?.metadata
+        const {paymentId}=req.params
+        const paymentIntent=await stripe.paymentIntents.retrieve(paymentId)
+        console.log(paymentIntent);
+        if(paymentIntent.status!=='success'){
+            const metadata=paymentIntent?.metadata
         //     // const subscriptionPlanId=metadata?.subscriptionPlanId
         //     // const userId=metadata.userId
         //     // const userFound=await User.findById(userId)
         //     // if(!userFound){
         //     //     throw new Error('User not found')
         //     // }
-        //     const amount=paymentIntent?.amount/100
-        //     const currency=paymentIntent?.currency
+            const amount=paymentIntent?.amount/100
+            const currency=paymentIntent?.currency
         //     // const newPayment=await Payment.create({
         //     //     user:userId,
         //     //     // subscriptionPlan:subscriptionPlanId,
@@ -78,20 +78,13 @@ const stripeController={
         //     //     userFound.plan=subscriptionPlanId
         //     //     await userFound.save()
         //     // }
-        //     console.log('SUCCESS');
-        //     res.json({
-        //         status:true,
-        //         message:'Payment verified, user updated',
-        //         // userFound
-        //     })
-        // }
-        const sig = request.headers['stripe-signature'];
+
+        const sig = req.headers['stripe-signature'];
         let event;
-        console.log("running");
-        
+        console.log("running");       
 
         try {
-            event = stripe.webhooks.constructEvent(request.body, "whsec_QB5yTbSHN4DBFZkyuDY0QMnGcsB7pC90", sig);
+            event = stripe.webhooks.constructEvent(req.body, "whsec_QB5yTbSHN4DBFZkyuDY0QMnGcsB7pC90", sig);
         } catch (err) {
             return response.status(400).send(`Webhook Error: ${err.message}`);
         }
@@ -101,7 +94,15 @@ const stripeController={
             console.log('💰 Payment succeeded!');
         }
 
-        response.json({ received: true });
+        res.json({ received: true });
+            console.log('SUCCESS');
+            res.json({
+                status:true,
+                message:'Payment verified, user updated',
+                // userFound
+            })
+        }
+        
     })
 }
 module.exports=stripeController
