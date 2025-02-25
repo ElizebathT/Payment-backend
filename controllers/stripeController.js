@@ -13,7 +13,6 @@ const stripeController={
                 metadata:{
                     // userEmail:req.user.email,
                 },
-                payment_method_types: ['card', 'apple_pay', 'google_pay', 'afterpay_clearpay', 'paypal', 'klarna', 'alipay', 'bancontact', 'ideal'],
             })
             res.send({
                 clientSecret:paymentIntent.client_secret
