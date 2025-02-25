@@ -24,9 +24,7 @@ const allowedOrigins = [                 // For local development
     },
     methods: 'GET,POST,PUT,DELETE',
     credentials: true
-}));
-  
-app.use(cors(corsOption));
+}));  
 
 app.use(cookieParser())
 
