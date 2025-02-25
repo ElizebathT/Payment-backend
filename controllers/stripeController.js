@@ -1,4 +1,5 @@
-const stripe=require("stripe")(process.env.STRIPE_SECRET_KEY)
+const Stripe = require("stripe");
+const stripe=Stripe(process.env.STRIPE_SECRET_KEY)
 const asyncHandler = require("express-async-handler");
 require("dotenv").config()
 // const Payment = require("../models/paymentModel");
@@ -21,11 +22,11 @@ const stripeController={
         }
     }),
 
-    verify:asyncHandler(async(req,res)=>{
+    webhook:asyncHandler(async(req,res)=>{
         const sig = req.headers['stripe-signature'];
         let event;
         try {
-            event = stripe.webhooks.constructEvent(req.body, sig, "whsec_QB5yTbSHN4DBFZkyuDY0QMnGcsB7pC90");
+            event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_KEY);
         } catch (err) {
             console.log(err.message);
             
