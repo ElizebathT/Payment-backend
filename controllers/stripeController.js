@@ -25,7 +25,7 @@ const stripeController={
         const sig = req.headers['stripe-signature'];
         let event;
         try {
-            event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_KEY);
+            event = stripe.webhooks.constructEvent(req.body, sig, "whsec_QB5yTbSHN4DBFZkyuDY0QMnGcsB7pC90");
         } catch (err) {
             return res.status(400).send(`Webhook Error: ${err.message}`);
         }
