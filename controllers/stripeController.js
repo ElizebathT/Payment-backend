@@ -27,6 +27,8 @@ const stripeController={
         try {
             event = stripe.webhooks.constructEvent(req.body, sig, "whsec_QB5yTbSHN4DBFZkyuDY0QMnGcsB7pC90");
         } catch (err) {
+            console.log(err.message);
+            
             return res.status(400).send(`Webhook Error: ${err.message}`);
         }
         if (event.type === 'charge.succeeded') {
