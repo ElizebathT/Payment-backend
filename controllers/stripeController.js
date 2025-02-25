@@ -37,7 +37,8 @@ const stripeController={
         }
         if (event.type === 'checkout.session.completed') {
             res.status(200).send('✅ Payment Completed:', event.data.object);
-        }        
+        }      
+        res.status(200).send('Webhook set');  
     })
 }
 module.exports=stripeController
