@@ -10,8 +10,7 @@ const app = express();
 
 
 connectDB()
-const allowedOrigins = [
-    "http://localhost:5173",                     // For local development
+const allowedOrigins = [                 // For local development
     "https://payment-frontend-ruby.vercel.app"   // For production
   ];
   
