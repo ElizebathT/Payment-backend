@@ -14,7 +14,8 @@ const allowedOrigins = [
     "https://payment-frontend-ruby.vercel.app",
     "http://localhost:5000"
   ];
-  
+  app.options('*', cors());
+
   app.use(cors({
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {
