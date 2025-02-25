@@ -33,10 +33,10 @@ const stripeController={
             return res.status(400).send(`Webhook Error: ${err.message}`);
         }
         if (event.type === 'payment_intent.succeeded') {
-            res.status(200).send('💰 Payment succeeded!');
+            return res.status(200).send('💰 Payment succeeded!');
         }
         if (event.type === 'checkout.session.completed') {
-            res.status(200).send('✅ Payment Completed:', event.data.object);
+            return res.status(200).send('✅ Payment Completed:', event.data.object);
         }      
         res.status(200).send('Webhook set');  
     })    
