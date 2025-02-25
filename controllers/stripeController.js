@@ -84,7 +84,7 @@ const stripeController={
         console.log("running");       
 
         try {
-            event = stripe.webhooks.constructEvent(req.body, "whsec_QB5yTbSHN4DBFZkyuDY0QMnGcsB7pC90", sig);
+            event = stripe.webhooks.constructEvent(req.body, sig, "whsec_QB5yTbSHN4DBFZkyuDY0QMnGcsB7pC90");
         } catch (err) {
             return res.status(400).send(`Webhook Error: ${err.message}`);
         }
@@ -93,7 +93,9 @@ const stripeController={
         if (event.type === 'payment_intent.succeeded') {
             console.log('💰 Payment succeeded!');
         }
-
+        if (event.type === 'checkout.session.completed') {
+            console.log('✅ Payment Completed:', event.data.object);
+        }
         // res.json({ received: true });
         //     console.log('SUCCESS');
         //     res.json({
