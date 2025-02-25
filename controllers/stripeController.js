@@ -5,10 +5,9 @@ require("dotenv").config()
 
 const stripeController={
     payment:asyncHandler(async(req,res)=>{
-        const {amount}=req.body
         try{
             const paymentIntent=await stripe.paymentIntents.create({
-                amount:amount*100,
+                amount:4000*100,
                 currency:'usd',
                 metadata:{
                     // userEmail:req.user.email,
