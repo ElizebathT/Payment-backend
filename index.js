@@ -14,17 +14,17 @@ const allowedOrigins = [                 // For local development
     "https://payment-frontend-ruby.vercel.app"   // For production
   ];
   
-  const corsOption = {
+  app.use(cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true); // Allow request
-      } else {
-        callback(new Error("Not allowed by CORS")); // Block request
-      }
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS not allowed for this origin'));
+        }
     },
-    optionsSuccessStatus: 200,
+    methods: 'GET,POST,PUT,DELETE',
     credentials: true
-  };
+}));
   
 app.use(cors(corsOption));
 
