@@ -11,7 +11,7 @@ const stripeController={
                 amount:amount*100,
                 currency:'usd',
                 metadata:{
-                    userEmail:req.user.email,
+                    // userEmail:req.user.email,
                 },
             })
             res.send({
