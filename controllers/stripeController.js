@@ -104,6 +104,8 @@ const stripeController={
         //         // userFound
         //     })
         // }
+        // ✅ Always send a 200 OK to Stripe
+    res.status(200).send('Webhook received')
         
     })
 }
