@@ -1,19 +1,24 @@
 const Stripe = require("stripe");
 const stripe=Stripe(process.env.STRIPE_SECRET_KEY)
 const asyncHandler = require("express-async-handler");
+const Payment = require("../models/paymentModel");
 require("dotenv").config()
-// const Payment = require("../models/paymentModel");
 
 const stripeController={
     payment:asyncHandler(async(req,res)=>{
+        const {id,currency}=req.body
+        const payment=await Payment.findById(id)
         try{
             const paymentIntent=await stripe.paymentIntents.create({
                 amount:4000*100,
-                currency:'usd',
+                currency:currency || payment.currency,
                 metadata:{
-                    // userEmail:req.user.email,
+                    // user:req.user.id,
                 },
             })
+            payment.reference= paymentIntent.id
+            await payment.save();
+
             res.send({
                 clientSecret:paymentIntent.client_secret
             })
@@ -32,13 +37,32 @@ const stripeController={
             
             return res.status(400).send(`Webhook Error: ${err.message}`);
         }
-        if (event.type === 'payment_intent.succeeded') {
-            return res.status(200).send('💰 Payment succeeded!');
-        }
-        if (event.type === 'checkout.session.completed') {
-            return res.status(200).send('✅ Payment Completed:', event.data.object);
-        }      
-        res.status(200).send('Webhook set');  
+        switch (event.type) {
+            case 'payment_intent.succeeded':
+                const paymentIntent = event.data.object;
+
+                // Update the payment status in the database
+                await Payment.findOneAndUpdate(
+                    { reference: paymentIntent.id },
+                    { status: 'succeeded' }
+                );
+
+                return res.status(200).send('💰 Payment succeeded!');
+
+            case 'checkout.session.completed':
+                const session = event.data.object;
+
+                // Update the payment status in the database
+                await Payment.findOneAndUpdate(
+                    { reference: session.id },
+                    { status: 'completed' }
+                );
+
+                return res.status(200).send('✅ Payment Completed');
+
+            default:
+                return res.status(200).send('Webhook received');
+        }  
     })    
 }
 module.exports=stripeController

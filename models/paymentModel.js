@@ -6,9 +6,12 @@ const PaymentSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  order: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Order",
+  },
   reference:{
     type:String,
-    required:true,
   },
   currency:{
     type:String,
@@ -19,11 +22,6 @@ const PaymentSchema = new mongoose.Schema({
     default:"pending",
     required:true
   },
-//   subscriptionPlan:{
-//     type:mongoose.Schema.Types.ObjectId,
-//     ref:"Plan",
-//     required:true
-//   },
   amount:{
     type:Number,
     default:0

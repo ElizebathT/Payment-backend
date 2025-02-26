@@ -12,6 +12,10 @@ const OrderSchema = new mongoose.Schema(
       ref: "Delivery",
       required: true,
     },
+    payment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Payment",
+    },
     otp:{
       type:Number,      
     },

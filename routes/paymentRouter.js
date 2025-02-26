@@ -1,9 +1,11 @@
-// const express =require("express");
-// const paymentController = require("../controllers/paymentController");
+const express =require("express");
+const paymentController = require("../controllers/paymentController");
+const userAuthentication = require("../middlewares/userAuthentication");
+express.json()
+const paymentRouter = express.Router();
 
-// const paymentRouter = express.Router();
+paymentRouter.get("/viewallr",userAuthentication, paymentController.getPayments);
+paymentRouter.put("/edit",userAuthentication, paymentController.updatePaymentStatus);
+paymentRouter.get("/search",userAuthentication, paymentController.getPaymentById);
 
-// paymentRouter.post("/create-order", paymentController.createOrder);
-// paymentRouter.post("/verify-payment", paymentController.verifyPayment);
-
-// module.exports = paymentRouter;
+module.exports = paymentRouter;

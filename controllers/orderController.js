@@ -5,6 +5,7 @@ const Cart = require("../models/cartModel");
 const User = require("../models/userModel");
 const Delivery = require("../models/deliveryModel");
 const Notification = require("../models/notificationModel");
+const Payment = require("../models/paymentModel");
 
 const orderController = {
   // Create a new order
@@ -40,15 +41,23 @@ const orderController = {
       delivery: delivery.id,
       address,
       contact,
-      status: "Processing"
+      status: "Pending"
     });
-
+    const payment = new Payment({
+      user: userId,
+      currency: "USD",
+      status: "Pending",
+      amount: order.totalAmount,
+      order:order._id
+    });
+    order.payment=payment
     try {
+      await payment.save()
       await order.save();
       delivery.order = order.id;
       await delivery.save();
     } catch (error) {
-      return res.status(500).json({ error: "Order creation failed" });
+      return res.status(500).json(error);
     }
 
     // Mark driver as unavailable

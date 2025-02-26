@@ -10,6 +10,11 @@ const paymentRouter = require("./paymentRouter");
 const stripeRouter = require("./stripeRoutes");
 const router=express()
 
+router.use("/stripe", stripeRouter);
+
+router.use(express.json())
+
+
 router.use("/users", userRoutes);
 router.use("/restaurant", restaurantRoutes);
 router.use("/menu", menuRouter);
@@ -17,7 +22,7 @@ router.use("/cart", cartRouter);
 router.use("/order", orderRouter);
 router.use("/employee", employeeRouter);
 router.use("/notifications", notifyRouter);
-// router.use("/payment", paymentRouter);
-router.use("/stripe", stripeRouter);
+router.use("/payment", paymentRouter);
+
 
 module.exports=router
