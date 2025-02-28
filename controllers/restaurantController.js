@@ -1,4 +1,11 @@
+const MenuItem = require("../models/menuItemModel");
 const Restaurant = require("../models/restaurantModel");
+const Complaint = require("../models/complaintModel");
+const Cart = require("../models/cartModel");
+const Employee = require("../models/employeeModel");
+const Order = require("../models/orderModel");
+const Delivery = require("../models/deliveryModel");
+const Review = require("../models/reviewModel");
 const asyncHandler = require("express-async-handler");
 
 const restaurantController = {
@@ -49,9 +56,21 @@ const restaurantController = {
         if (!restaurant) {
             throw new Error("Restaurant not found");
         }
-        await Menu.deleteMany();
+        const restaurantId=restaurant._id
+        await Promise.all([
+            MenuItem.deleteMany({ restaurant: restaurantId }),
+            Employee.deleteMany({ restaurant: restaurantId }),
+            Order.deleteMany({ restaurant: restaurantId }),
+            Complaint.deleteMany({ restaurant: restaurantId }),
+            Review.deleteMany({ restaurant: restaurantId }),
+            Delivery.deleteMany({ order: { $in: await Order.find({ restaurant: restaurantId }).distinct('_id') } }),
+            Cart.deleteMany({ "items.menuItem": { $in: await MenuItem.find({ restaurant: restaurantId }).distinct('_id') } }),
+        ]);
+    
+        // Finally, delete the restaurant
         await restaurant.deleteOne();
-        res.send({ message: "Restaurant deleted" });
+    
+        res.send({ message: "Restaurant and related data deleted successfully" });
     }),
 };
 
