@@ -3,32 +3,7 @@ const MenuItem = require("../models/menuItemModel");
 
 const menuController = {
     // Create a new menu item
-    createMenuItem: asyncHandler(async (req, res) => {
-        const { name, description, price, stock, category, availability, discount, addons, dietaryRestrictions } = req.body;
-        
-        // Create new menu item
-        const newItem = await MenuItem.create({
-            name,
-            description,
-            stock,
-            price,
-            image:req.files, // Assuming image is handled in the request files
-            category,
-            availability: availability || true, 
-            discount: discount || { percentage: 0, validUntil: null },
-            addons: addons || [],  // Add-ons field
-            dietaryRestrictions: dietaryRestrictions || []  // Dietary restrictions field
-        });
-        
-        if (!newItem) {
-            throw new Error("Creation failed");
-        }
-        
-        res.send({
-            message: "New menu item added successfully",
-            menuItem: newItem
-        });
-    }),
+    
 
     // Get all menu items
     getAllMenuItems: asyncHandler(async (req, res) => {
@@ -71,16 +46,7 @@ const menuController = {
         });
     }),
 
-    // Delete a menu item
-    deleteMenuItem: asyncHandler(async (req, res) => {
-        const { name } = req.body;
-        const menuItem = await MenuItem.findOne({ name });
-        if (!menuItem) {
-            throw new Error("Menu item not found");
-        }
-        await menuItem.deleteOne();
-        res.json({ message: "Menu item deleted successfully" });
-    }),
+    
 
     // Filter menu items by category, price range, and other options
     filterMenuItems: asyncHandler(async (req, res) => {

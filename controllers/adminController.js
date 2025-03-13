@@ -19,7 +19,45 @@ const adminController={
           res.send(dashboard);
         
       }),
-      
+
+    createMenuItem: asyncHandler(async (req, res) => {
+              const { name, description, price, stock, category, availability, discount, addons, dietaryRestrictions } = req.body;
+              
+              // Create new menu item
+              const newItem = await MenuItem.create({
+                  name,
+                  description,
+                  stock,
+                  price,
+                  image:req.files, // Assuming image is handled in the request files
+                  category,
+                  availability: availability || true, 
+                  discount: discount || { percentage: 0, validUntil: null },
+                  addons: addons || [],  // Add-ons field
+                  dietaryRestrictions: dietaryRestrictions || []  // Dietary restrictions field
+              });
+              
+              if (!newItem) {
+                  throw new Error("Creation failed");
+              }
+              
+              res.send({
+                  message: "New menu item added successfully",
+                  menuItem: newItem
+              });
+    }),
+
+          // Delete a menu item
+    deleteMenuItem: asyncHandler(async (req, res) => {
+                  const { name } = req.body;
+                  const menuItem = await MenuItem.findOne({ name });
+                  if (!menuItem) {
+                      throw new Error("Menu item not found");
+                  }
+                  await menuItem.deleteOne();
+                  res.json({ message: "Menu item deleted successfully" });
+    }),
+
     verifyUser:asyncHandler(async (req, res) => {
         const {email}=req.body
         const user= await User.findOne({email})
@@ -30,24 +68,6 @@ const adminController={
         await user.save()
         res.send("User verified")
     }),
-    updateMenuItemStock: asyncHandler(async (req, res) => {
-        const { name, stock } = req.body;
-        
-        const menuItem = await MenuItem.findOne({ name });
-        if (!menuItem) {
-            throw new Error("Menu item not found");
-        }
-        
-        menuItem.stock = stock;
-        const updatedMenuItem = await menuItem.save();
-        if(menuItem.stock>0)
-        {
-            menuItem.availability=true
-        }
-        res.send({
-            message: "Stock updated successfully",
-            menuItem: updatedMenuItem
-        });
-    })
+    
 }
 module.exports=adminController

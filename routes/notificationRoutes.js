@@ -1,10 +1,10 @@
 const express = require("express");
 const userAuthentication = require("../middlewares/userAuthentication");
 const notificationController = require("../controllers/notificationController");
-const notifyRouter = express.Router();
-express.json()
+const notificationRouter = express.Router();
 
-notifyRouter.get("/viewall", userAuthentication,notificationController.getNotifications);
-notifyRouter.delete("/read", userAuthentication,notificationController.readNotification);
+notificationRouter.get("/viewall",userAuthentication,notificationController.getUserNotifications);
+notificationRouter.put("/update",userAuthentication,notificationController.markNotificationAsRead);
+notificationRouter.delete("/delete",userAuthentication,notificationController.deleteNotification);
 
-module.exports = notifyRouter;
+module.exports = notificationRouter;

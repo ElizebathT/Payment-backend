@@ -10,5 +10,7 @@ userRoutes.post("/login",userController.login);
 userRoutes.put("/edit", userAuthentication,userController.profile);
 userRoutes.delete("/logout", userController.logout);
 userRoutes.get("/view", userAuthentication,userController.getUserProfile);
+userRoutes.post("/forgot", userController.forgotPassword);
+userRoutes.put("/reset", userController.resetPassword);
 
 module.exports = userRoutes;
