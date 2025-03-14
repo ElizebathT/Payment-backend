@@ -78,7 +78,7 @@ const orderController = {
         // Send low stock notification
         if (menuItem.stock < 5) {
           const notify = new Notification({
-            recipient: admin._id,
+            user: admin._id,
             message: `Low stock alert: ${menuItem.name} has less than 5 units left.`
           });
           await notify.save();
@@ -88,7 +88,11 @@ const orderController = {
 
     // Clear cart after successful order
     await Cart.findOneAndDelete({ user: userId });
-
+        const notify = new Notification({
+            user: admin._id,
+            message: `New Order placed: ${order._id}`
+          });
+          await notify.save();
     res.status(201).json({ message: "Order placed successfully", orderId: order._id });
   }),
 
@@ -135,7 +139,12 @@ const orderController = {
         await driver.save();
       }
     }
-
+    const admin = await User.findOne({ role: "admin" });
+    const notify = new Notification({
+        user: admin._id,
+        message: `Order ${order._id} cancelled.`
+      });
+      await notify.save();
     res.status(200).json({ message: "Order cancelled successfully", orderId: order._id });
   })
 };

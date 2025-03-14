@@ -25,7 +25,7 @@ const deliveryController = {
       order.status = "Delivered";
       await order.save();
       const deliveryStatusNotify = new Notification({
-        recipient: order.user,
+        user: order.user,
         message: `Delivery status for order ${order._id} has been updated to: ${status}.`
       });
       await deliveryStatusNotify.save();

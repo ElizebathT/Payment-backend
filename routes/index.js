@@ -8,6 +8,7 @@ const employeeRouter = require("./employeeRoutes");
 const notifyRouter = require("./notificationRoutes");
 const paymentRouter = require("./paymentRouter");
 const stripeRouter = require("./stripeRoutes");
+const reservationRouter = require("./reservationRoutes");
 const router=express()
 
 router.use("/stripe", stripeRouter);
@@ -22,6 +23,7 @@ router.use("/cart", cartRouter);
 router.use("/order", orderRouter);
 router.use("/employee", employeeRouter);
 router.use("/notifications", notifyRouter);
+router.use("/reservations", reservationRouter);
 router.use("/payment", paymentRouter);
 
 

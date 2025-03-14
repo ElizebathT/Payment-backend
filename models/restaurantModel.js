@@ -8,8 +8,6 @@ const RestaurantSchema = new mongoose.Schema({
     contact: String,
     menu: [{ type: mongoose.Schema.Types.ObjectId, ref: "Menu" }],
     employees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    deliveryAvailable: Boolean,
-    ratings: Number,
 }, { timestamps: true });
 
 const Restaurant = mongoose.model("Restaurant", RestaurantSchema);
