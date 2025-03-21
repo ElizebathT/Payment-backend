@@ -4,30 +4,7 @@ const asyncHandler = require("express-async-handler");
 
 const employeeController={
 // Create a new employee
-    createEmployee :asyncHandler(async (req, res) => {
-    const { user, jobTitle, department, dateHired, salary, manager, status, performanceReview } = req.body;
-
-    // Check if the user exists
-    const existingUser = await User.findById(user);
-    if (!existingUser) {
-      return res.status(400).json({ message: "User not found" });
-    }
-
-    // Create the employee
-    const employee = new Employee({
-      user,
-      jobTitle,
-      department,
-      dateHired,
-      salary,
-      manager,
-      status,
-      performanceReview,
-    });
-
-    await employee.save();
-    res.status(201).json({ message: "Employee created successfully", employee });
-}),
+    
 
     getEmployees :asyncHandler(async (req, res) => {
     const employees = await Employee.find()

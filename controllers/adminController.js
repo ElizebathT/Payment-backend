@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const Restaurant = require("../models/restaurantModel");
 const Order = require("../models/orderModel");
 const MenuItem = require("../models/menuItemModel");
+const { default: bcrypt } = require("bcryptjs");
+const Employee = require("../models/employeeModel");
 
 const adminController={
     getDashboardData :asyncHandler(async (req, res) => {
@@ -67,6 +69,50 @@ const adminController={
         user.verified=true
         await user.save()
         res.send("User verified")
+    }),
+    createEmployee:asyncHandler(async (req, res) => {
+        const { username, email, password,jobTitle, department, dateHired, salary, manager, status, performanceReview } = req.body;
+    
+        // Check if user already exists
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            throw new Error("User already exists");
+        }
+    
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+    
+        // Create the user
+        const user = await User.create({
+            username,
+            email,
+            password: hashedPassword,
+            role:"employee"
+        });
+    
+        if (!user) {
+            throw new Error("User creation failed");
+        }
+    
+        // Create the employee linked to the user
+        const employee = new Employee({
+            user: user._id, // Linking employee to the user
+            jobTitle,
+            department,
+            dateHired,
+            salary,
+            manager,
+            status,
+            performanceReview,
+        });
+    
+        await employee.save();
+    
+        res.status(201).json({ 
+            message: "Employee created successfully", 
+            employee,
+            user: { id: user._id, email: user.email, role: user.role } 
+        });
     }),
     
 }

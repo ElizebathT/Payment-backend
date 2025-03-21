@@ -11,6 +11,11 @@ const ReviewSchema = new mongoose.Schema({
     ref: "Restaurant", 
     required: true 
   },
+  menuItem: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "MenuItem", 
+    required: true 
+  },
   comment: { 
     type: String, 
     required: true 

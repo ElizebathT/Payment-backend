@@ -81,7 +81,69 @@ filterReviewsByCategory :asyncHandler(async (req, res) => {
     
         const restaurants = await Restaurant.find({ _id: { $in: restaurantIds } }).populate('reviews');
         res.send(restaurants)
-    })
+    }),
+    addMenuReview: asyncHandler(async (req, res) => {
+        const { menuItemId, comment, rating } = req.body;
+        const userId = req.user.id;
+    
+        if (!comment || !rating) {
+          return res.status(400).json({ message: "Comment and rating are required" });
+        }
+    
+        const menuItem = await MenuItem.findById(menuItemId);
+        if (!menuItem) {
+          return res.status(404).json({ message: "Menu item not found" });
+        }
+    
+        const newReview = new MenuReview({
+          user: userId,
+          menuItem: menuItemId,
+          comment,
+          rating
+        });
+    
+        await newReview.save();
+    
+        // Link review to the menu item
+        await MenuItem.findByIdAndUpdate(menuItemId, { $push: { reviews: newReview._id } });
+    
+        res.status(201).json({ message: "Review added successfully", review: newReview });
+      }),
+    
+      // Get reviews for a specific menu item
+      getMenuReviews: asyncHandler(async (req, res) => {
+        const { menuItemId } = req.params;
+    
+        const menuItem = await MenuItem.findById(menuItemId).populate({
+          path: "reviews",
+          populate: { path: "user", select: "name" }
+        });
+    
+        if (!menuItem) {
+          return res.status(404).json({ message: "Menu item not found" });
+        }
+    
+        res.status(200).json(menuItem.reviews);
+      }),
+    
+      // Delete a menu review (Admin or user who posted it)
+      deleteMenuReview: asyncHandler(async (req, res) => {
+        const { reviewId } = req.params;
+        const userId = req.user.id;
+    
+        const review = await MenuReview.findById(reviewId);
+        if (!review) {
+          return res.status(404).json({ message: "Review not found" });
+        }
+    
+        if (review.user.toString() !== userId.toString() && !req.user.isAdmin) {
+          return res.status(403).json({ message: "Not authorized to delete this review" });
+        }
+    
+        await MenuReview.findByIdAndDelete(reviewId);
+    
+        res.status(200).json({ message: "Review deleted successfully" });
+      })
 }
 
 module.exports = reviewController

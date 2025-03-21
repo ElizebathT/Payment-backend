@@ -35,7 +35,6 @@ const MenuItemSchema = new mongoose.Schema({
   },
   stock: { 
     type: Number, 
-    required: true, 
     default: 5
   },
   // New fields for customization

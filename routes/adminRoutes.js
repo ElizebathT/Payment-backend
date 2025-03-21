@@ -7,6 +7,7 @@ const adminRouter = express.Router();
 
 express.json()
 
+adminRouter.post("/create",userAuthentication,adminAuthentication, adminController.createEmployee);
 adminRouter.get("/get", userAuthentication,adminAuthentication, adminController.getDashboardData);
 adminRouter.put("/verify", userAuthentication,adminAuthentication, adminController.verifyUser);
 adminRouter.post("/add", userAuthentication,adminAuthentication,upload.single("image"),adminController.createMenuItem);
