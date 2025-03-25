@@ -58,20 +58,27 @@ updateEmployee :asyncHandler( async (req, res) => {
 }),
 
 // Delete an employee
- deleteEmployee :asyncHandler(async (req, res) => {
+deleteEmployee : asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
 
-    const employee = await Employee.findByIdAndDelete(id);
-
+    // Find the employee
+    const employee = await Employee.findById(id);
     if (!employee) {
       return res.status(404).json({ message: "Employee not found" });
     }
 
-    res.status(200).json({ message: "Employee deleted successfully" });
+    // Delete the associated user
+    await User.findByIdAndDelete(employee.user);
+
+    // Delete the employee
+    await Employee.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Employee and associated user deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
-})
+}),
+
 }
 module.exports=employeeController
