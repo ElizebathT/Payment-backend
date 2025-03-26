@@ -12,5 +12,6 @@ adminRouter.get("/get", userAuthentication,adminAuthentication, adminController.
 adminRouter.put("/verify", userAuthentication,adminAuthentication, adminController.verifyUser);
 adminRouter.post("/add", userAuthentication,adminAuthentication,upload.single("image"),adminController.createMenuItem);
 adminRouter.delete("/delete", userAuthentication,adminAuthentication,adminController.deleteMenuItem);
+adminRouter.delete("/deleteuser", userAuthentication,adminAuthentication,adminController.deleteUser);
 
 module.exports = adminRouter;

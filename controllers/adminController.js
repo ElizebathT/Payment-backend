@@ -114,6 +114,18 @@ const adminController={
             user: { id: user._id, email: user.email, role: user.role } 
         });
     }),
-    
+
+    deleteUser:asyncHandler(async (req, res) => {
+        try {
+            const { id } = req.body;
+            const deletedUser = await User.findByIdAndDelete(id);    
+            if (!deletedUser) {
+                return res.status(404).json({ message: "User not found" });
+            }    
+            res.status(200).json({ message: "User deleted successfully", deletedUser });
+        } catch (error) {
+            res.status(500).json({ message: "Server error", error: error.message });
+        }
+}),
 }
 module.exports=adminController
