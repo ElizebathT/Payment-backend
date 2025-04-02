@@ -7,10 +7,17 @@ const employeeController={
     
 
     getEmployees :asyncHandler(async (req, res) => {
-    const employees = await Employee.find()
-      .populate("user", "username email role")  // Populate user details
-      .populate("manager", "jobTitle username")  // Populate manager details
-      .select("-__v");  // Exclude unnecessary fields
+      const today = new Date().toISOString().split("T")[0]; // Get today's date
+
+      const employees = await Employee.find()
+          .populate("user", "username email role")
+          .populate("manager", "jobTitle username")
+          .populate({
+              path: "attendance",
+              match: { date: { $gte: new Date(today), $lt: new Date(today + "T23:59:59.999Z") } },
+              select: "status"
+          })
+          .select("-__v");
     res.send(employees);
 }),
 

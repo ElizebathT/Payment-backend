@@ -51,8 +51,8 @@ const adminController={
 
           // Delete a menu item
     deleteMenuItem: asyncHandler(async (req, res) => {
-                  const { name } = req.body;
-                  const menuItem = await MenuItem.findOne({ name });
+                  const { id } = req.body;
+                  const menuItem = await MenuItem.findOne({ id });
                   if (!menuItem) {
                       throw new Error("Menu item not found");
                   }

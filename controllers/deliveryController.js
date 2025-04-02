@@ -4,6 +4,7 @@ const Order = require("../models/orderModel");
 const User = require("../models/userModel");
 const crypto = require('crypto');
 const Notification = require("../models/notificationModel");
+const Employee = require("../models/employeeModel");
 
 
 const generateOTP = () => {
@@ -12,16 +13,12 @@ const generateOTP = () => {
 
 const deliveryController = {
   updateDeliveryStatus: asyncHandler(async (req, res) => {
-    const driver = req.user.id;
-    const { status,otp } = req.body;
-    const delivery = await Delivery.findOne({ driver: driver });
+    const { status } = req.body;
+    const delivery = await Delivery.findOne({ driver: req.user.id });
     if (!delivery) res.send("Delivery not found");
       
       const order = await Order.findById(delivery.order);
       if (!order) res.send("Order not found");
-    if(otp){
-      if (otp != order.otp) res.send("Invalid OTP");
-
       order.status = "Delivered";
       await order.save();
       const deliveryStatusNotify = new Notification({
@@ -29,19 +26,16 @@ const deliveryController = {
         message: `Delivery status for order ${order._id} has been updated to: ${status}.`
       });
       await deliveryStatusNotify.save();
-      const driverUser = await User.findOne({ _id: driver });
+      const driverUser = await Employee.findOne({user:req.user.id});
       driverUser.isAvailable = true;
       await driverUser.save();
       delivery.status ="Delivered"
-      await Delivery.deleteOne({driver});
       res.send("Delivery Complete")
-    }
     if(status){
     delivery.status = status;
     const updatedDelivery = await delivery.save();
     res.send(updatedDelivery);
-    }
-    
+    }    
     
   }),
   sendOTP:asyncHandler(async (req, res) => {

@@ -26,10 +26,6 @@ const UserSchema = new mongoose.Schema({
   address:{ 
       type:  String,
   },
-  isAvailable:{
-    type:Boolean,
-    default:true
-  }
 }, { timestamps: true });
 
 const User = mongoose.model("User", UserSchema);

@@ -11,22 +11,10 @@ const AttendanceSchema = new mongoose.Schema({
     required: true,
     default: Date.now
   },
-  checkIn: {
-    type: String, // Use "HH:MM" format (store as string or Date if needed)
-  },
-  checkOut: {
-    type: String, // Use "HH:MM" format
-  },
-  status: {
-    type: String,
-    enum: ["present", "absent", "leave"],
-    required: true
-  },
-  totalHours: {
-    type: Number, // Calculated based on check-in and check-out
-  },
-  notes: {
-    type: String, // Optional notes (e.g., reason for absence)
+  status:{
+    type:String,
+    enum: ["present", "absent", "on leave"],
+    default:"Present"
   }
 }, { timestamps: true });
 

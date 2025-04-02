@@ -10,7 +10,7 @@ menuRouter.get("/viewall", userAuthentication,menuController.getAllMenuItems);
 
 menuRouter.get("/search",userAuthentication, menuController.getMenuItemById);
 menuRouter.get("/filter",userAuthentication, menuController.filterMenuItems);
-
+menuRouter.get("/searchitem",userAuthentication, menuController.searchMenu);
 menuRouter.put("/edit",userAuthentication, menuController.updateMenuItem);
 
 

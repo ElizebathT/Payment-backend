@@ -29,7 +29,13 @@ const EmployeeSchema = new mongoose.Schema({
   },
   performanceReview: {
     type: String,  // Performance review comments
-  }
+  },
+    isAvailable:{
+      type:Boolean,
+      default:true
+    },
+    attendance: [{ type: mongoose.Schema.Types.ObjectId, ref: "Attendance" }] // Add this line
+
 }, { timestamps: true });
 
 const Employee = mongoose.model("Employee", EmployeeSchema);

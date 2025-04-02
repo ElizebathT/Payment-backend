@@ -13,13 +13,30 @@ const menuController = {
 
     // Get a single menu item by name
     getMenuItemById: asyncHandler(async (req, res) => {
-        const { name } = req.body;
-        const menuItem = await MenuItem.findOne({ name });
+        const { id } = req.body;
+        const menuItem = await MenuItem.findOne({ id });
         if (!menuItem) {
             return res.status(404).json({ message: "Menu item not found" });
         }
         res.json(menuItem);
     }),
+
+    searchMenu: asyncHandler(async (req, res) => {
+        const { name } = req.body;
+        const query = {
+            $or: []
+        };
+    
+        if (name) query.$or.push({ name: { $regex: name, $options: "i" } });
+       
+        // Ensure there is at least one condition
+        if (query.length === 0) {
+            return res.status(400).json({ message: "Invalid search parameters" });
+        }
+    
+        const menu = await MenuItem.find(query);
+        res.json(menu);
+    }), 
 
     // Update a menu item
     updateMenuItem: asyncHandler(async (req, res) => {

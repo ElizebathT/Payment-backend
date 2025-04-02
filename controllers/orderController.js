@@ -6,6 +6,7 @@ const User = require("../models/userModel");
 const Delivery = require("../models/deliveryModel");
 const Notification = require("../models/notificationModel");
 const Payment = require("../models/paymentModel");
+const Employee = require("../models/employeeModel");
 
 const orderController = {
   // Create a new order
@@ -19,14 +20,14 @@ const orderController = {
     }
 
     // Find an available driver
-    const driver = await User.findOne({ role: "delivery", isAvailable: true }).sort({ lastAssigned: 1 });
+    const driver = await Employee.findOne({ jobTitle: "delivery", isAvailable: true }).sort({ lastAssigned: 1 });
     if (!driver) {
       return res.status(503).json({ error: "No available drivers at the moment" });
     }
 
     // Create delivery record
     const delivery = new Delivery({
-      driver: driver._id,
+      driver: driver.user,
       status: "Out for Delivery",
       estimatedDeliveryTime: 60
     });
@@ -85,7 +86,11 @@ const orderController = {
         }
       }
     }
-
+    const notifyorder = new Notification({
+      user: driver.user,
+      message: `New Order placed: ${order._id}`
+    });
+    await notifyorder.save();
     // Clear cart after successful order
     await Cart.findOneAndDelete({ user: userId });
         const notify = new Notification({
@@ -133,7 +138,7 @@ const orderController = {
 
     // Mark the driver as available again
     if (order.delivery && order.delivery.driver) {
-      const driver = await User.findById(order.delivery.driver);
+      const driver = await Employee.findOne({user:order.delivery.driver});
       if (driver) {
         driver.isAvailable = true;
         await driver.save();
